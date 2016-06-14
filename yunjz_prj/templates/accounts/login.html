@@ -1,0 +1,29 @@
+{% extends "base_yunjz.html" %}
+{%block title%}登录{%endblock%}S
+{%block content %}
+	<h2>欢迎来到云记账点</h2>
+	{%if error%}
+		<p>{{username}} {{error}}</p>
+	{%endif%}
+	<form action="" method="post" class="form" role="form">
+	{% csrf_token %}
+		<div class="form-group">
+			<label>昵称：</label>
+			<input id="id_username" name="username" type="text"/>
+		</div>
+		<div>
+			<label>密码：</label>
+			<input id="id_password" name="password" type="password"/>
+		</div>
+	<button id="id_submit" type="submit">登录</button>
+	<button id="id_register" type="button" onclick='javascript:window.location.href="{% url 'accounts:register' %}"'>注册</button>
+	</form>
+	<h3>在这里你可以</h3>
+	<ul>
+		<li>随时随地的通过网络记账</li>
+		<li>统计分析自己每月收支</li>
+		<li>导出表格进行备份</li>
+		<li>导入以前记录的表格</li>
+	</ul>
+{%endblock%}
+
