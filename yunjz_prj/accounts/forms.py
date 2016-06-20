@@ -18,14 +18,15 @@ class RegisterForm(forms.Form):
 	if len(self.cleaned_data["username"])<4:
 	    raise forms.ValidationError(u"昵称长度不能小于4")
         else:
-	    for a in self.clean_data["username"]
+	    for a in self.cleaned_data["username"]:
 	        if a not in ALLOW_CHAR:
 		    raise forms.ValidationError(u"昵称仅能用字母或数字")
         users = User.objects.filter(username__iexact=self.cleaned_data["username"])
         if not users:
 	    return self.cleaned_data["username"]
         else:
-	    raise forms.ValidationError(u"该昵称已经被使用请使用其他的昵称")	    def clean_email(self):
+	    raise forms.ValidationError(u"该昵称已经被使用请使用其他的昵称")
+    def clean_email(self):
         #验证重复email
 	emails=User.objects.filter(email__iexact=self.cleaned_data["email"])
 	if not emails:
