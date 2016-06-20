@@ -3,13 +3,13 @@
 {%block content %}
 	<h2>欢迎来到云记账站点</h2>
 	{%if error%}
-		<p>{{username}} {{error}}</p>
+		<p>{{error}}</p>
 	{%endif%}
 	<form action="" method="post" class="form" role="form">
 	{% csrf_token %}
 		<div class="form-group">
 			<label>昵称：</label>
-			<input id="id_username" name="username" type="text"/>
+			<input id="id_username" name="username" type="text" value="{{username}}"/>
 		</div>
 		<div>
 			<label>密码：</label>
