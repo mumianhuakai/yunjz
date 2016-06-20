@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login as auth_login,logout as auth_logout
 from django.core.urlresolvers import reverse
 from accounts.forms import RegisterForm
-
+#用户的主界面可以用装饰符装饰一下，这样只有登录成功才能进入主页，登录不成
+#功被重定向到settings设置中的LOGIN_REDIRECT_URL='/accounts/'中的url
 @login_required
 def index(request):
 	return render(request,"accounts/index.html")
@@ -22,7 +23,9 @@ def register(request):
 	        username=form.cleaned_data["username"]
 	        email=form.cleaned_data["email"]
 	        password=form.cleaned_data["password"]
+		#获得用户名、密码、email后用这三者为参数创建用户
 	        user=User.objects.create_user(username,email,password)
+		#创建好用户之后要保存倒数据库中
 	        user.save()
 	        if _login(request,username,password,template_var):
 	            return HttpResponseRedirect("/accounts/index")
@@ -44,15 +47,18 @@ def login(request):
 	return render(request,"accounts/login.html",template_var)
 def _login(request,username,password,dict_var):
 	ret=False
+	#authenticate(username="",password="")方法对明文密码进行加密
 	uesr=authenticate(username=username,password=password)
 	if user is not None:
 		if user.is_active:
+		    #登录与会话有关，把user信息存到会话中
 		    auth_login(request,user)
 		    ret=True
 		else:
 		    dict_var["error"] = u'用户'+username+u'不存在'
 		return ret
 def logout(request):
+	#把存到会话中的用户信息删除
 	auth_logout(request)
 	return render(request,'accounts/logout.html')
 
