@@ -2,6 +2,8 @@
 {%block title%}注册{%endblock%}
 {% block content %}
 	<h2>注册成为我们的一员吧</h2>
+	#展示总体的那个clean函数中的错误用form.non_field_errors展示，所以首先
+	#判断是否有这一error存在
 	{%if form.non_field_errors%}
 	<p>{{form.non_field_errors}}</p>
 	{%endif%}
