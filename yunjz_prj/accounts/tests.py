@@ -46,15 +46,15 @@ class LoginPageTestCase(TestCase):
 	response = self.client.post(reverse('accounts:login'),{'username':self.user.username,'password':PASSWORD})
         #重定向，地址用url逆向解析
         self.assertEqual(response.status_code,302)
-        self.assertRedirects(reponse,reverse('accounts:index'))
+        self.assertRedirects(response,reverse('accounts:index'))
     def test_login_post_noactive(self):
         #POST request
-        reponse=self.client.post(reverse('accounts:login'),{'username':self.no_active_user.username,'password':PASSWORD})
+        response=self.client.post(reverse('accounts:login'),{'username':self.no_active_user.username,'password':PASSWORD})
         self.assertEqual(response.status_code,200)
         self.assertEqual(response.context['error'],u'用户'+self.no_active_user.username+u'没有激活')
     def test_login_post_wrong(self):
         #POST request
-        reponse = self.client.post(reverse('accounts:login'),{'username':self.fail_username,'password':PASSWORD})
+        response = self.client.post(reverse('accounts:login'),{'username':self.fail_username,'password':PASSWORD})
         self.assertEqual(response.status_code,200)
         self.assertEqual(response.context['error'],u'用户'+self.fail_username+u'不存在')
 
@@ -70,9 +70,9 @@ class IndexPageTestCase(TestCase):
         self.assertEqual(response.status_code,200)
 
     def test_nologin(self):
-        reponse = self.client.get(reverse('accounts:index'))
-        self.assertEqual(reponse.status_code,302)
-        self.assertRedirects(reaponse,'/accounts/login/?next=/accounts/index')
+        response = self.client.get(reverse('accounts:index'))
+        self.assertEqual(response.status_code,302)
+        self.assertRedirects(response,'/accounts/login/?next=/accounts/index')
 #测试表单
 class RegisterFormTestCase(TestCase):
     def setUp(self):
@@ -85,7 +85,7 @@ class RegisterFormTestCase(TestCase):
         self.assertTrue(form['email'].errors)
         self.assertTrue(form['password'].errors)
         self.assertTrue(form['re_password'].errors)
-        self.assertTrue(form.non_field_erroes)
+        self.assertTrue(form.non_field_errors)
     def test_correct(self):
         form=RegisterForm(self.correct_data)
         self.assertTrue(form.is_valid())
