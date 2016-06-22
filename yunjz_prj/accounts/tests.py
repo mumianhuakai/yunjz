@@ -15,10 +15,10 @@ class LoginPageTestCase(TestCase):
     #首先用setUp方法告诉测试之前应该做哪些事情,这时django会自动产生一个临时数据库
     def setUp(self):
         #创建一个可以登录的用户
-        self.user = User.objects.create_user(username="test",email="test@123.com,password=PASSWORD"
+        self.user = User.objects.create_user(username="test",email="test@123.com",password=PASSWORD)
         self.user.save()
         #创建一个no_active用户
-        self.no_active_user = User.objects.create_user(username="test1",email="test1@123.com,password=PASSWORD"
+        self.no_active_user = User.objects.create_user(username="test1",email="test1@123.com",password=PASSWORD)
         self.no_active_user.is_active=False
         self.no_active_user.save()
         #创建一个fail_username这是不存在的用户 
@@ -101,7 +101,7 @@ class RegisterPageTestCase(TestCase):
     def test_empty(self):
         response = self.client.post(reverse('accounts:register'),{})
         self.assertTrue(response.context['form']['email'])
-        self.assertTrue(response.conntext['form']['username'])
+        self.assertTrue(response.context['form']['username'])
 
 
 #测试一个正确的提交
