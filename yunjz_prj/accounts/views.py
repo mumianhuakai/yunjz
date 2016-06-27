@@ -13,7 +13,6 @@ from accounts.forms import RegisterForm
 @login_required
 def index(request):
 	return render(request,"accounts/index.html")
-
 def register(request):
 	template_var={}
 	form=RegisterForm()
@@ -22,15 +21,17 @@ def register(request):
 	    form=RegisterForm(request.POST.copy())
 	    #生成表单之后，调用is_valid检查它的正确性，把clean那些数据全部执行
 	    #一遍，把error信息全部放在form里,放进区之后怎么表现出来？
+#判断表单是否有效
 	    if form.is_valid():
 	        username=form.cleaned_data["username"]
 	        email=form.cleaned_data["email"]
 		password=form.cleaned_data["password"]
-		#获得用户名、密码、email后用这三者为参数创建用户
+		#验证成功并且表单有效时，获得用户名、密码、email后用这三者为参数创建用户
 	        user=User.objects.create_user(username,email,password)
 		#创建好用户之后要保存倒数据库中
 	        user.save()
 	        if _login(request,username,password,template_var):
+#创建成功后进行重定向
 	            return HttpResponseRedirect("/accounts/index")
 	#把form中的错误信息填到模板对应得变量中,就可以在模板templates/accounts/
 	#对应的html文件中展示出错误信息
@@ -51,18 +52,21 @@ def login(request):
 	            return HttpResponseRedirect("/accounts/index")
 	    template_var.update({"username":username})
 	return render(request,"accounts/login.html",template_var)
+
 def _login(request,username,password,dict_var):
 	ret=False
 	#authenticate(username="",password="")方法对明文密码进行加密
 	uesr=authenticate(username=username,password=password)
 	if user is not None:
-		if user.is_active:
-		    #登录与会话有关，把user信息存到会话中
-		    auth_login(request,user)
-		    ret=True
-		else:
-		    dict_var["error"] = u'用户'+username+u'不存在'
-		return ret
+	    if user.is_active:
+	    #登录与会话有关，把user信息存到会话中
+	        auth_login(request,user)
+	        ret=True
+	    else:
+	        dict_var["error"] = u'用户'+username+u'没有激活'
+        else:
+            dict_var["error"] = u'用户'+username +u'不存在'
+        return ret
 def logout(request):
 	#把存到会话中的用户信息删除
 	auth_logout(request)

@@ -17,5 +17,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    #把所有与accounts有关的url都定向到accounts目录下的urls.py中去
     url(r'^accounts/',include('accounts.urls',namespace='accounts')),
 ]
